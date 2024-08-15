@@ -4,6 +4,24 @@ Check out our [paper](https://ia.cr/2020/1137) (published at ACM TOPS'22) for de
 
 This code is provided as an experimental implementation for testing purposes and should not be used in a productive environment. We cannot guarantee security and correctness.
 
+### Tips:
+
+1. Project buidling
+
+    Enter the Framework directory: `cd MOTION/`
+
+    Create and enter the build directory: `mkdir build && cd build`
+
+    Then, Call `make -j 16` in the build directory.
+
+2. Runnning shells are all in the `./Eval/` folder, where:
+    
+    `benchmark.sh` is for benchmarking all the basic operations, and 
+
+    `./crosstab.sh` is for the asymmetric cases.
+
+
+
 ### Requirements
 
 ---
