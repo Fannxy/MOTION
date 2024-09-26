@@ -1,0 +1,31 @@
+===========================================================================
+CrossTabs
+===========================================================================
+MOTION version: 5d1a858-dirty @ dev
+invocation: /root/MOTION/build/bin/crosstabs_shared --my-id 0 --parties 0,10.5.0.12,23000 1,10.5.0.13,23001 --input-file /root/MOTION/data//crosstabs-shared/data/crosstabs.0.dat --bins 5
+by root@n12, PID 951834
+===========================================================================
+Run time statistics over 1 iterations
+---------------------------------------------------------------------------
+                          mean        median        stddev
+---------------------------------------------------------------------------
+MT Presetup              1.239 ms      0.000 ms -nan       ms
+MT Setup                38.687 ms      0.000 ms      0.000 ms
+SP Presetup             11.771 ms      0.000 ms -nan       ms
+SP Setup                50.814 ms      0.000 ms      0.000 ms
+SB Presetup              0.003 ms      0.000 ms      0.000 ms
+SB Setup                55.096 ms      0.000 ms      0.000 ms
+Base OTs                 0.000 ms      0.000 ms      0.000 ms
+OT Extension Setup      35.167 ms      0.000 ms      0.000 ms
+KK13 OT Extension Setup      0.000 ms      0.000 ms      0.000 ms
+---------------------------------------------------------------------------
+Preprocessing Total    167.220 ms      0.000 ms -nan       ms
+Gates Setup              3.696 ms      0.000 ms      0.000 ms
+Gates Online           359.129 ms      0.000 ms -nan       ms
+---------------------------------------------------------------------------
+Circuit Evaluation     588.378 ms      0.000 ms      0.000 ms
+===========================================================================
+Communication with each other party:
+Sent: 4.668 MiB in 10326 messages
+Received: 2.685 MiB in 10325 messages
+===========================================================================

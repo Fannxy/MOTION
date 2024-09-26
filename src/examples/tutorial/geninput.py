@@ -34,7 +34,7 @@ import random, argparse, os, math, errno
 def create_dirs(program):
     if program == "mult3-shared-arit" or program == "mult3-shared-bool" :
         program = "mult3"
-    dirname = program + "/data"
+    dirname = "{}/{}/data".format(args.output_dir, program)
     if not os.path.exists(dirname):
         try:
             os.makedirs(dirname)
@@ -44,10 +44,10 @@ def create_dirs(program):
 
 def gen_mult3_real_input():
     # 10 bit inputs for a max of 32 bit result
-    BITS = 10;
-    f0 = open("mult3/data/mult3.0.dat", 'w+')
-    f1 = open("mult3/data/mult3.1.dat", 'w+')
-    f2 = open("mult3/data/mult3.2.dat", 'w+')
+    BITS = 10
+    f0 = open("{}/mult3/data/mult3.0.dat".format(args.output_dir),'w+')
+    f1 = open("{}/mult3/data/mult3.1.dat".format(args.output_dir),'w+')
+    f2 = open("{}/mult3/data/mult3.2.dat".format(args.output_dir),'w+')
 
     product = 1
     x = random.getrandbits(BITS)
@@ -69,9 +69,10 @@ def gen_mult3_real_input():
 
 def gen_mult3_shared_arithmetic_input():
     # 10 bit inputs for a max of 32 bit result
-    BITS = 10;
-    f0 = open("mult3/data/mult3shared_arit.0.dat",'w+')
-    f1 = open("mult3/data/mult3shared_arit.1.dat",'w+')
+    BITS = 10
+    f0 = open("{}/mult3/data/mult3shared_arit.0.dat".format(args.output_dir),'w+')
+    f1 = open("{}/mult3/data/mult3shared_arit.1.dat".format(args.output_dir),'w+')
+
 
     product = 1
     for _ in range(3):
@@ -91,9 +92,10 @@ def gen_mult3_shared_arithmetic_input():
 
 def gen_mult3_shared_boolean_input():
     # 10 bit inputs for a max of 32 bit result
-    BITS = 10;
-    f0 = open("mult3/data/mult3shared_bool.0.dat",'w+')
-    f1 = open("mult3/data/mult3shared_bool.1.dat",'w+')
+    BITS = 10
+    f0 = open("{}/mult3/data/mult3shared_bool.0.dat".format(args.output_dir),'w+')
+    f1 = open("{}/mult3/data/mult3shared_bool.1.dat".format(args.output_dir),'w+')
+    
 
     product = 1
     for _ in range(3):
@@ -119,7 +121,7 @@ def gen_innerproduct_input(l):
     result = sum([x * y for x, y in zip(xs, ys)])
 
     for i, arr in zip([0, 1], [xs, ys]):
-        f = open("innerproduct/data/innerproduct.%d.dat" % i, 'w+')
+        f = open("{}/innerproduct/data/innerproduct.{}.dat".format(args.output_dir, i), 'w+')
         for a in arr:
             f.write("%d\n" % a)
 
@@ -133,7 +135,7 @@ def gen_crosstabs_input(l):
     ys = [random.getrandbits(BITS) for _ in range(l)]
 
     for i, arr in zip([0, 1], [xs, ys]):
-        f = open("crosstabs/data/crosstabs.%d.dat" % i, 'w+')
+        f = open("{}/crosstabs/data/crosstabs.{}.dat".format(args.output_dir, i), 'w+')
         for a in arr:
             f.write("%d\n" % a)
 
@@ -142,16 +144,46 @@ def gen_crosstabs_input(l):
         print("Bin (%d mod #bins) : %d\t" % (ys[j], xs[j]))
     print("And 0 for others")
 
+def gen_crosstabs_shared_input(l, b):
+    BITS = int((32 - int(math.log(10, 2))) / 2)
+
+    xs = [random.getrandbits(BITS) for _ in range(l)]
+    ys = [random.getrandbits(BITS) for _ in range(l)]
+
+    f = []
+    for i in [0, 1]:
+        f.append(open("{}/crosstabs-shared/data/crosstabs.{}.dat".format(args.output_dir, i), 'w+'))
+
+    for x in xs:
+        left = random.randrange(x + 1)
+        f[0].write("%d\n" % left)
+        f[1].write("%d\n" % (x - left))
+    for y in ys:
+        left = random.randrange(y % b + 1)
+        f[0].write("%d\n" % left)
+        f[1].write("%d\n" % ((y % b) ^ left))
+
+    print("Expected results :")
+    for j in range(len(ys)):
+        print("Bin (%d) : %d\t" % (ys[j] % b, xs[j]))
+    print("And 0 for others")
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='generates input for MOTION sample programs')
 
     parser.add_argument('-l', default=5, type=int,
                         help="array length (for innerproduct, crosstabs)")
+    
+    parser.add_argument('-b', default=10, type=int,
+                        help="bin size (for crosstabs-shared)")
 
-    programs = ["mult3", "mult3-shared-arit", "mult3-shared-bool", "innerproduct", "crosstabs"]
+    programs = ["mult3", "mult3-shared-arit", "mult3-shared-bool", "innerproduct", "crosstabs", "crosstabs-shared"]
     parser.add_argument('-p', default="crosstabs", choices=programs,
                         help="program selection")
+
+    parser.add_argument('--output-dir', default="/root/MOTION/data/", type=str,
+                        help="output directory for generated input")
 
     args = parser.parse_args()
 
@@ -171,3 +203,6 @@ if __name__ == "__main__":
 
     elif args.p == "crosstabs":
         gen_crosstabs_input(args.l)
+
+    elif args.p == "crosstabs-shared":
+        gen_crosstabs_shared_input(args.l, args.b)

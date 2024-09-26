@@ -13,6 +13,7 @@ README.html
 *.dump
 .idea*
 *_generated.h
+*.dat
 
 src/motioncore/communication/fbs_headers/*
 src/motioncore/utility/config.h
@@ -40,3 +41,5 @@ CTestTestfile.cmake
 
 # doxygen
 docs/Doxyfile
+
+data/*
