@@ -74,38 +74,46 @@ std::vector<Combination> GenerateAllCombinations() {
 
   std::vector<Combination> combinations;
 
-  for (const auto bit_size : kBooleanBitSizes) {
-    for (const auto number_of_simd : kNumbersOfSimd) {
-      for (const auto operation_type : kBooleanOperationTypes) {
-        combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kBooleanGmw,
-                                  operation_type, number_of_simd);
-        combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kBmr, operation_type,
-                                  number_of_simd);
-      }
+  // for (const auto bit_size : kBooleanBitSizes) {
+  //   for (const auto number_of_simd : kNumbersOfSimd) {
+  //     for (const auto operation_type : kBooleanOperationTypes) {
+  //       combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kBooleanGmw,
+  //                                 operation_type, number_of_simd);
+  //       combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kBmr, operation_type,
+  //                                 number_of_simd);
+  //     }
 
-      combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kBooleanGmw, T::kB2Y,
-                                number_of_simd);
-      combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kBmr, T::kY2B,
-                                number_of_simd);
-    }
-  }
+  //     combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kBooleanGmw, T::kB2Y,
+  //                               number_of_simd);
+  //     combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kBmr, T::kY2B,
+  //                               number_of_simd);
+  //   }
+  // }
 
-  for (const auto bit_size : kArithmeticBitSizes) {
-    for (const auto number_of_simd : kNumbersOfSimd) {
-      for (const auto operation_type : kArithmeticOperationTypes) {
-        combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kArithmeticGmw,
-                                  operation_type, number_of_simd);
-      }
-      combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kBooleanGmw, T::kB2A,
-                                number_of_simd);
-      combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kBmr, T::kY2A,
-                                number_of_simd);
-      combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kArithmeticGmw, T::kA2B,
-                                number_of_simd);
-      combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kArithmeticGmw, T::kA2Y,
-                                number_of_simd);
-    }
-  }
+  // for (const auto bit_size : kArithmeticBitSizes) {
+  //   for (const auto number_of_simd : kNumbersOfSimd) {
+  //     for (const auto operation_type : kArithmeticOperationTypes) {
+  //       combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kArithmeticGmw,
+  //                                 operation_type, number_of_simd);
+  //     }
+  //     combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kBooleanGmw, T::kB2A,
+  //                               number_of_simd);
+  //     combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kBmr, T::kY2A,
+  //                               number_of_simd);
+  //     combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kArithmeticGmw, T::kA2B,
+  //                               number_of_simd);
+  //     combinations.emplace_back(bit_size, encrypto::motion::MpcProtocol::kArithmeticGmw, T::kA2Y,
+  //                               number_of_simd);
+  //   }
+  // }
+
+  // combinations.emplace_back(1000, encrypto::motion::MpcProtocol::kBooleanGmw, T::kIn, 1000);
+  // int total_simd = 1000000;
+  int total_simd = 1048576;
+  int num_task = 16;
+  int simd_per_task = total_simd / num_task;
+  combinations.emplace_back(16, encrypto::motion::MpcProtocol::kBooleanGmw, T::kB2A, simd_per_task);
+  // combinations.emplace_back(16, encrypto::motion::MpcProtocol::kBmr, T::kY2A, simd_per_task);
   return combinations;
 }
 

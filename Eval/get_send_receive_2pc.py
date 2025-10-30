@@ -20,12 +20,12 @@ if __name__ == "__main__":
 
     if args.record_operation:
         data = {
+            "Protocol": [],
+            "Operation": [],
             "Sent": [],
             "Sent_mess": [],
             "Received": [],
             "Received_mess": [],
-            "Protocol": [],
-            "Operation": [],
             "Circuit_evaluation": []
         }
     else:
